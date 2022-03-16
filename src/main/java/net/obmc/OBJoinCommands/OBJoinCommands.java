@@ -29,10 +29,13 @@ public class OBJoinCommands extends JavaPlugin
 	public static OBJoinCommands instance;
 	private EventListener listener;
 
+	private Configuration config = this.getConfig();
+
 	private static ArrayList<String> worldlist = new ArrayList<String>();
 	private static ArrayList<String> svrcmdlist = new ArrayList<String>();
 	private HashMap<String, ArrayList<String>> wrldcmds = new HashMap<String, ArrayList<String>>();
 	private Boolean cmdstate = null;
+
 
 	private static String plugin = "OBJoinCommands";
 	private static String pluginprefix = "[" + plugin + "] ";
@@ -68,7 +71,7 @@ public class OBJoinCommands extends JavaPlugin
 	// initialize plugin
 	public void initializeStuff() {
 		this.saveDefaultConfig();
-		Configuration config = this.getConfig();
+		//Configuration config = this.getConfig();
 		
 		// load up commands from config
 		if ( config.contains( "server" ) ) {
@@ -243,6 +246,8 @@ public class OBJoinCommands extends JavaPlugin
 				insertidx = seqnum-1;
 			}
 			svrcmdlist.add( insertidx, cmd );
+			config.getConfigurationSection( "server" ).set( "commandlist", svrcmdlist );
+			saveConfig();
 		} else {
 			if ( wrldcmds.keySet().contains( world ) ) {
 				if ( wrldcmds.get( world ).size() == 0 ) {
@@ -253,11 +258,17 @@ public class OBJoinCommands extends JavaPlugin
 					insertidx = seqnum-1;
 				}
 				wrldcmds.get( world ).add( insertidx, cmd );
+				config.getConfigurationSection( "worlds" ).createSection( world );
+				config.getConfigurationSection( "worlds" ).getConfigurationSection( world ).set( "commandlist", wrldcmds.get( world ) );
+				saveConfig();
 			} else {
 				// new array
 				ArrayList<String> worldcmdlist = new ArrayList<String>();
 				worldcmdlist.add( cmd );
 				wrldcmds.put( world, worldcmdlist );
+				config.getConfigurationSection( "worlds" ).createSection( world );
+				config.getConfigurationSection( "worlds" ).getConfigurationSection( world ).set( "commandlist", worldcmdlist );
+				saveConfig();
 			}
 		}
 	}
@@ -268,6 +279,8 @@ public class OBJoinCommands extends JavaPlugin
 		if ( type.equals( "server" ) ) {
 			if ( svrcmdlist.size() > 0 && seqnum <= svrcmdlist.size() ) {
 				rtnstate = svrcmdlist.remove( seqnum - 1 );
+				config.getConfigurationSection( "server" ).set( "commandlist", svrcmdlist );
+				saveConfig();
 			} else {
 				rtnstate = "No server command for that sequence number.";
 			}
@@ -278,6 +291,9 @@ public class OBJoinCommands extends JavaPlugin
 					if ( wrldcmds.get( world ).size() == 0 ) {
 						wrldcmds.remove( world );
 					}
+					config.getConfigurationSection( "worlds" ).createSection( world );
+					config.getConfigurationSection( "worlds" ).getConfigurationSection( world ).set( "commandlist", wrldcmds.get( world ) );
+					saveConfig();
 				} else {
 					rtnstate = "No command in '" + world + "' for that sequence number.";
 				}

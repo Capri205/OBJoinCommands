@@ -2,12 +2,11 @@
 #
 
 server:
-  commandlist:
-    - give @p cooked_beef 10
+  commandlist: []
 worlds:
   world:
-    commandlist:
+    commandlist: []
   world_nether:
-    commandlist:
+    commandlist: []
   world_the_end:
-    commandlist:
+    commandlist: []

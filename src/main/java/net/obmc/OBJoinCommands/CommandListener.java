@@ -152,6 +152,7 @@ public class CommandListener implements CommandExecutor {
 					for ( int i = seqidx + 1; i < args.length; i++ ) {
 						cmd += args[i] + " ";
 					}
+					cmd = cmd.trim();
 					OBJoinCommands.getInstance().insertCommand( type, world, seqnum, cmd );
 					sender.sendMessage( chatmsgprefix + ChatColor.GREEN + "Command registered for sequence number " + seqnum );
 					break;
