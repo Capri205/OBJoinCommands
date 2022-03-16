@@ -5,10 +5,10 @@ Useful for your lobby or game servers where you want something specific done whe
 
 Use the /objc command to add or remove a command for the server or a specific world.
 
-Commands:
-/objc list [ server | <world> ] - to show current commands
-/objc add [ server | world <worldname> ] <sequence> "<command>" - to set a command at a specific sequence position for a world or the server
-/objc del [ server | world <worldname> ] <sequence> - to remove a server or world command at a specific position
+Commands:<br />
+/objc list [ server | <world> ] - to show current commands<br />
+/objc add [ server | world <worldname> ] <sequence> "<command>" - to set a command at a specific sequence position for a world or the server<br />
+/objc del [ server | world <worldname> ] <sequence> - to remove a server or world command at a specific position<br />
 
 Examples:
 
@@ -30,5 +30,10 @@ objc del world world 2 - will remove the command at sequence number 2 for the ov
 Currently any command that fails will fail silently. Something to be worked on later so we get better error reporting. I didn't want to
 spam the chat with fail messages if commands are broken.
 
+Shorthands:<br />
+Currently the plugin supports the @p shorthand, which translates to the player joining. You can use player names directly if you wish.<br />
+Support for more shorthands will be added as the plugin evolves.
+
+For the initial release there is a fixed 20 tick or 1 second execution delay imposed upon the command. This will become configurable later.
 
 Compiled for 1.18 with Java 17, but should work with older versions (up to a point).
