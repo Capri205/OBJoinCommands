@@ -1,0 +1,13 @@
+# Add commands here or via the server chat
+#
+
+server:
+  commandlist:
+    - give @p cooked_beef 10
+worlds:
+  world:
+    commandlist:
+  world_nether:
+    commandlist:
+  world_the_end:
+    commandlist:

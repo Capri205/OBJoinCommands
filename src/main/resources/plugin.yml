@@ -1,0 +1,13 @@
+name: OBJoinCommands
+version: 1.0
+description: Execute a command when a player joins a world or the server
+author: Fahrenheit451
+api-version: 1.18
+website: https://ob-mc.net
+main: net.obmc.OBJoinCommands.OBJoinCommands
+depend: []
+commands:
+  objc:
+    description: Main command for setting a command for a world or server
+    usage: Use /objc for usage
+    aliases:
