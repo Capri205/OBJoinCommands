@@ -6,9 +6,9 @@ Useful for your lobby or game servers where you want something specific done whe
 Use the /objc command to add or remove a command for the server or a specific world.
 
 Commands:<br />
-/objc list [ server | <world> ] - to show current commands<br />
-/objc add [ server | world <worldname> ] <sequence> "<command>" - to set a command at a specific sequence position for a world or the server<br />
-/objc del [ server | world <worldname> ] <sequence> - to remove a server or world command at a specific position<br />
+/objc list [ server | &lt;world&gt; ] - to show current commands<br />
+/objc add [ server | world &lt;worldname&gt; ] &lt;sequence&gt; &lt;command&gt; - set a command at a specific sequence for a world or the server<br />
+/objc del [ server | world &lt;worldname&gt; ] &lt;sequence&gt; - remove a server or world command at a specific sequence<br />
 
 Examples:
 
