@@ -1,6 +1,7 @@
 # Add commands here or via the server chat
 #
 
+delay: 20
 server:
   commandlist: []
 worlds:

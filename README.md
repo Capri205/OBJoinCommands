@@ -28,6 +28,8 @@ sequence order, so if there was a command with sequence number 6 then it will be
 
 objc del world world 2 - will remove the command at sequence number 2 for the overworld.
 
+objc set delay 400 - will set the global delay to 400 ticks or 20 seconds. Default value is 20 ticks or 1 second.
+
 Currently any command that fails will fail silently but will be logged by the server.
 
 Shorthands:<br />
@@ -35,6 +37,5 @@ The plugin will translate the @p and @s shorthands to the joining player, so it'
 You can use other Minecraft shorthands in your commands, such as @r for random player, @a all players, @e all entities and of course set
 the player name directly if you wish. I believe any command should be supported, but report any issues here or ob-mc.net discord.
 
-For the initial release there is a fixed 20 tick or 1 second execution delay imposed upon the command. This will become configurable later.
 
 Compiled for 1.18 with Java 17, but should work with older versions (up to a point).

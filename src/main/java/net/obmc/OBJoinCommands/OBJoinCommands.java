@@ -34,6 +34,7 @@ public class OBJoinCommands extends JavaPlugin
 	private static ArrayList<String> worldlist = new ArrayList<String>();
 	private static ArrayList<String> svrcmdlist = new ArrayList<String>();
 	private HashMap<String, ArrayList<String>> wrldcmds = new HashMap<String, ArrayList<String>>();
+	private long delay = 20L;
 	private Boolean cmdstate = null;
 
 
@@ -72,6 +73,18 @@ public class OBJoinCommands extends JavaPlugin
 	public void initializeStuff() {
 		this.saveDefaultConfig();
 		//Configuration config = this.getConfig();
+		
+		try {
+			this.delay = Long.parseLong( config.getString( "delay" ) );
+			if ( this.delay < 0 ) {
+				this.delay = 20L;
+				log.log( Level.INFO, getLogMsgPrefix() + "Negative delay value read. Setting to default 20 ticks (1 second)");
+			}
+			log.log( Level.INFO, getLogMsgPrefix() + "Delay is " + this.delay);
+		} catch ( NumberFormatException e ) {
+			log.log( Level.INFO, getLogMsgPrefix() + "Error reading delay from config. Setting to default 20 ticks (1 second)");
+			delay = 20L;
+		}
 		
 		// load up commands from config
 		if ( config.contains( "server" ) ) {
@@ -302,5 +315,14 @@ public class OBJoinCommands extends JavaPlugin
 			}
 		}
 		return rtnstate;
+	}
+
+	public long getDelay() {
+		return delay;
+	}
+	public void setDelay( long delay ) {
+		this.delay = delay;
+		config.set( "delay", delay );
+		saveConfig();
 	}
 }

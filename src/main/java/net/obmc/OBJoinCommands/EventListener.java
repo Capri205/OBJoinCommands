@@ -59,8 +59,8 @@ public class EventListener implements Listener
 		Iterator<String> scit =  OBJoinCommands.getInstance().getServerCommands().iterator();
 		while ( scit.hasNext() ) {
 			String command = scit.next();
-			command = command.replaceAll( "@p", player.getName() );
-			doCommand( command, 20 );
+			command = command.replaceAll( "@p", player.getName() ).replaceAll( "@s", player.getName() );
+			doCommand( command, OBJoinCommands.getInstance().getDelay() );
 		}
 	}
 	// perform any world commands
@@ -69,8 +69,8 @@ public class EventListener implements Listener
 		Iterator<String> wcit =  OBJoinCommands.getInstance().getWorldCommands( worldname ).iterator();
 		while ( wcit.hasNext() ) {
 			String command = wcit.next();
-			command = command.replaceAll( "@p", player.getName() );
-			doCommand( command, 20 );
+			command = command.replaceAll( "@p", player.getName() ).replaceAll( "@s", player.getName() );
+			doCommand( command, OBJoinCommands.getInstance().getDelay() );
 		}
 	}
 	

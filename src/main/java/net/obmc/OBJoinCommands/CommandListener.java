@@ -1,5 +1,7 @@
 package net.obmc.OBJoinCommands;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -53,6 +55,10 @@ public class CommandListener implements CommandExecutor {
 			String cmd = null;
 			
 			switch (args[0].toLowerCase()) {
+
+				case "help":
+					Usage( player );
+					break;
 
 				case "list":
 				case "show":
@@ -205,6 +211,33 @@ public class CommandListener implements CommandExecutor {
 					}
 					break;
 
+				case "set":
+					if ( args.length < 3 ) {
+						sender.sendMessage( chatmsgprefix + ChatColor.RED + "You haven't provided enough paramters for this command." );
+						return false;
+					}
+					long delay = -1;
+					if ( args[1].equals( "delay") ) {
+						try {
+							delay = Long.parseLong( args[2] );
+							if ( delay < 0 ) {
+								sender.sendMessage( chatmsgprefix + ChatColor.RED + "A negative delay isn't allowed." );
+								return false;
+							}
+						} catch ( NumberFormatException e ) {
+							sender.sendMessage( chatmsgprefix + ChatColor.RED + "Invalid delay provided." );
+							return false;
+						}
+					} else {
+						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Unknown parameter for set command." );
+						return false;
+					}
+					OBJoinCommands.getInstance().setDelay( delay );
+					double delayseconds = delay / 20;
+					BigDecimal ds = new BigDecimal( delayseconds ).setScale( 0, RoundingMode.HALF_DOWN );
+					sender.sendMessage( chatmsgprefix + ChatColor.GREEN + "Delay set to " + delay + " ticks (" + ds + " second" + ( ds.intValue() != 1 ? "s" : "" ) + ")");
+					break;
+
 				default:
 					sender.sendMessage( chatmsgprefix + ChatColor.RED + "Unknown command!");
 					Usage(sender);
@@ -216,9 +249,10 @@ public class CommandListener implements CommandExecutor {
 
 	// show player the command help
     void Usage(CommandSender sender) {
-        sender.sendMessage(chatmsgprefix + "/obs show [server|world <worldname>]" + ChatColor.GOLD + " - Show available damage types");
+        sender.sendMessage(chatmsgprefix + "/obs show [server|world <worldname>]" + ChatColor.GOLD + " - Show all or some commands");
         sender.sendMessage(chatmsgprefix + "/obs add  [server|world <worldname>] <sequence> command" + ChatColor.GOLD + " - Add a new command at sequence number");
         sender.sendMessage(chatmsgprefix + "/obs del  [server|world <worldname>] <sequence>" + ChatColor.GOLD + " - Remove command at sequence number");
+        sender.sendMessage(chatmsgprefix + "/obs set delay <delayinticks>" + ChatColor.GOLD + " - Set the global command delay");
     }
     
     
