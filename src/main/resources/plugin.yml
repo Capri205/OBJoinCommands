@@ -2,7 +2,7 @@ name: OBJoinCommands
 version: 1.0
 description: Execute a command when a player joins a world or the server
 author: Fahrenheit451
-api-version: 1.18
+api-version: 1.19
 website: https://ob-mc.net
 main: net.obmc.OBJoinCommands.OBJoinCommands
 depend: []
