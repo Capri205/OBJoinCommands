@@ -38,4 +38,4 @@ You can use other Minecraft shorthands in your commands, such as @r for random p
 the player name directly if you wish. I believe any command should be supported, but report any issues here or ob-mc.net discord.
 
 
-Compiled for 1.19 with Java 17.
+Compiled for 1.20 with Java 17.
