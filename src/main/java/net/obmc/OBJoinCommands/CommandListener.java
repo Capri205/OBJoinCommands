@@ -9,46 +9,43 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class CommandListener implements CommandExecutor {
 
-	static Logger log = Logger.getLogger( "Minecraft" );
+	static Logger log = Logger.getLogger("Minecraft");
 	
-	private String chatmsgprefix = null;
-	private String logmsgprefix = null;
+	private Component chatMsgPrefix = null;
 	
 	public CommandListener() {
-		chatmsgprefix = OBJoinCommands.getInstance().getChatMsgPrefix();
-		logmsgprefix = OBJoinCommands.getInstance().getLogMsgPrefix();
+		chatMsgPrefix = OBJoinCommands.getInstance().getChatMsgPrefix();
 	}
 	
 	@Override
-	public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		// for now only op can use the command
-		if ( !sender.isOp() ) {
-			sender.sendMessage( ChatColor.RED + "Sorry, command is reserved for server operators." );
+		if (!sender.isOp()) {
+			sender.sendMessage(Component.text("Sorry, command is reserved for server operators.", NamedTextColor.RED));
 			return true;
 		}
 
 		// usage if no arguments passed
-		if ( args.length == 0 ) {
-			Usage( sender );
+		if (args.length == 0) {
+			Usage(sender);
 			return true;
 		}
 
 		// process the command and any arguments
-		if ( command.getName().equalsIgnoreCase( "objc" ) ) {
+		if (command.getName().equalsIgnoreCase("objc")) {
 			
 			Player player = (Player) sender;
-			int seqidx = 0;
 			String type = null;
 			String world = null;
 			int seqnum = -1;
@@ -57,189 +54,186 @@ public class CommandListener implements CommandExecutor {
 			switch (args[0].toLowerCase()) {
 
 				case "help":
-					Usage( player );
+					Usage(player);
 					break;
 
 				case "list":
 				case "show":
-					if ( args.length > 1 ) {
-						if ( args[1].equals( "server" ) ) {
-							sender.sendMessage( chatmsgprefix + "Server on join commands:" );
+					if (args.length > 1) {
+						if (args[1].equals("server")) {
+							sender.sendMessage(chatMsgPrefix.append(Component.text("Server on join commands:", NamedTextColor.LIGHT_PURPLE)));
 							Iterator<String> scit =  OBJoinCommands.getInstance().getServerCommands().iterator();
 							int idx = 1;
-							while ( scit.hasNext() ) {
-								sender.sendMessage( chatmsgprefix + "  " + ChatColor.GOLD + idx + ". " + ChatColor.GRAY + scit.next() );
+							while (scit.hasNext()) {
+								sender.sendMessage(chatMsgPrefix.append(Component.text(idx + ". ", NamedTextColor.GOLD))
+								    .append(Component.text(scit.next(), NamedTextColor.GRAY)));
 								idx++;
 							}
 							
-						} else if ( args[1].equals( "world" ) ) {
-							if ( args.length > 2 ) {
+						} else if (args[1].equals("world")) {
+							if (args.length > 2) {
 								world = args[2];
 								Collection<String> worlds = OBJoinCommands.getInstance().getWorlds();
-								if ( worlds.contains( world ) ) {
-									sender.sendMessage( chatmsgprefix + "Commands for " + world + ":" );
-									ArrayList<String> commands = OBJoinCommands.getInstance().getWorldCommands( world );
+								if (worlds.contains(world)) {
+									sender.sendMessage(chatMsgPrefix.append(Component.text("Commands for " + world + ":", NamedTextColor.LIGHT_PURPLE)));
+									ArrayList<String> commands = OBJoinCommands.getInstance().getWorldCommands(world);
 									int idx = 1;
-									for ( String worldcmd : commands ) {
-										sender.sendMessage( chatmsgprefix + "    " + ChatColor.GOLD + idx + ". " + ChatColor.GRAY + worldcmd );
+									for (String worldcmd : commands) {
+										sender.sendMessage(chatMsgPrefix.append(Component.text(idx + ". ", NamedTextColor.GOLD))
+										      .append(Component.text(worldcmd, NamedTextColor.GRAY)));
 										idx++;
 									}								
 								} else {
-									sender.sendMessage( chatmsgprefix + "No commands for world '" + world + "'" );
+									sender.sendMessage(chatMsgPrefix.append(Component.text("No commands for world '" + world + "'", NamedTextColor.LIGHT_PURPLE)));
 								}
 							} else {
-								sender.sendMessage( chatmsgprefix + ChatColor.RED + "Please provide a world as part of the command.");
+								sender.sendMessage(chatMsgPrefix.append(Component.text("Please provide a world as part of the command.", NamedTextColor.RED)));
 							}
 						} else {
-							sender.sendMessage( chatmsgprefix + ChatColor.RED + "Add command needs 'server' or 'world'." );
+							sender.sendMessage(chatMsgPrefix.append(Component.text("Add command needs 'server' or 'world'.", NamedTextColor.RED)));
 							return false;							
 						}
 					} else {
-						if ( OBJoinCommands.getInstance().hasServerCommands() ) {
-							sender.sendMessage( chatmsgprefix + "Server on join commands:" );
+						if (OBJoinCommands.getInstance().hasServerCommands()) {
+							sender.sendMessage(chatMsgPrefix.append(Component.text("Server on join commands:", NamedTextColor.LIGHT_PURPLE)));
 							Iterator<String> scit =  OBJoinCommands.getInstance().getServerCommands().iterator();
 							int idx = 1;
-							while ( scit.hasNext() ) {
-								sender.sendMessage( chatmsgprefix + "  " + ChatColor.GOLD + idx + ". " + ChatColor.GRAY + scit.next() );
+							while (scit.hasNext()) {
+								sender.sendMessage(chatMsgPrefix.append(Component.text(idx + ". ", NamedTextColor.GOLD))
+								        .append(Component.text(scit.next(), NamedTextColor.GRAY)));
 								idx++;
 							}
 						} else {
-							sender.sendMessage( chatmsgprefix + "No server commands set" );
+							sender.sendMessage(chatMsgPrefix.append(Component.text("No server commands set", NamedTextColor.LIGHT_PURPLE)));
 						}
-						if ( OBJoinCommands.getInstance().hasWorldCommands() ) {
-							sender.sendMessage( chatmsgprefix + "World commands:" );
+						if (OBJoinCommands.getInstance().hasWorldCommands()) {
+							sender.sendMessage(chatMsgPrefix.append(Component.text("World commands:", NamedTextColor.LIGHT_PURPLE)));
 							Collection<String> worlds = OBJoinCommands.getInstance().getWorlds();
-							for ( String listworld : worlds ) {
-								sender.sendMessage( chatmsgprefix + "  " + listworld + ":" );
-								ArrayList<String> commands = OBJoinCommands.getInstance().getWorldCommands( listworld );
+							for (String listworld : worlds) {
+								sender.sendMessage(chatMsgPrefix.append(Component.text("  " + listworld + ":", NamedTextColor.LIGHT_PURPLE)));
+								ArrayList<String> commands = OBJoinCommands.getInstance().getWorldCommands(listworld);
 								int idx = 1;
-								for ( String worldcmd : commands ) {
-									sender.sendMessage( chatmsgprefix + "    " + ChatColor.GOLD + idx + ". " + ChatColor.GRAY + worldcmd );
+								for (String worldcmd : commands) {
+									sender.sendMessage(chatMsgPrefix.append(Component.text("    " + idx + ". ", NamedTextColor.GOLD))
+									        .append(Component.text(worldcmd, NamedTextColor.GRAY)));
 									idx++;
 								}
 							}
 						} else {
-							sender.sendMessage( chatmsgprefix + "No worlds have commands set" );
+							sender.sendMessage(chatMsgPrefix.append(Component.text("No worlds have commands set", NamedTextColor.LIGHT_PURPLE)));
 						}
 					}
 					break;
 
-				//objc add [ server | world <worldname> ] <sequence> "<command>"
+				//objc add [ server | <worldname> ] <sequence> "<command>"
 				case "add":
-					if ( args.length < 4 ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "You haven't provided enough paramters for this command." );
+				    log.log(Level.INFO, "debug - args.len: " + args.length);
+				    for(int i = 0; i < args.length; i++) {
+				        log.log(Level.INFO, "debug -   " + i + " : " + args[i]);
+				    }
+				    // validate we have enough arguments 
+					if (args.length < 4) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("You haven't provided enough paramters for /obrep add", NamedTextColor.RED)));
 						return false;
 					}
-					if ( !args[1].equals( "server" ) && !args[1].equals( "world" ) ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Add command needs 'server' or 'world'." );
-						return false;
-					}
+					// validate server or world
 					type = args[1];
-					seqidx = 2;
-					if ( args[1].equals( "world" ) ) {
-						if ( !checkWorld( args[2] ) ) {
-							sender.sendMessage( chatmsgprefix + ChatColor.RED + "Invalid world provided." );
-							return false;
-						}
-						world = args[2];
-						seqidx = 3;
+					if (!type.equals("server")) {
+					    if (!checkWorld(args[1])) {
+                            sender.sendMessage(chatMsgPrefix.append(Component.text("Invalid world name provided", NamedTextColor.RED)));
+                            return false;
+                        }
 					}
+					// validate sequence number is a number
 					try {
-						seqnum = Integer.parseInt( args[seqidx] );
-					} catch ( NumberFormatException e ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Invalid sequence number provided." );
+						seqnum = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("Invalid sequence number provided", NamedTextColor.RED)));
 						return false;
 					}
-					if ( seqnum < 1 ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Negative or zero sequence numbers aren't allowed." );
+					if (seqnum < 1) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("Negative or zero sequence numbers aren't allowed", NamedTextColor.RED)));
 						return false;						
 					}
+					// build out the command from the remaining arguments
 					cmd = "";
-					for ( int i = seqidx + 1; i < args.length; i++ ) {
+					for (int i = 3; i < args.length; i++) {
 						cmd += args[i] + " ";
 					}
 					cmd = cmd.trim();
-					OBJoinCommands.getInstance().insertCommand( type, world, seqnum, cmd );
-					sender.sendMessage( chatmsgprefix + ChatColor.GREEN + "Command registered for sequence number " + seqnum );
+					log.log(Level.INFO, "debug - type: " + type + ", seqnum: " + seqnum + ", cmd: '" + cmd + "'");
+					OBJoinCommands.getInstance().insertCommand(type, seqnum, cmd);
+					sender.sendMessage(chatMsgPrefix.append(Component.text("Command registered for sequence number " + seqnum, NamedTextColor.GREEN)));
 					break;
 
-				//objc del [ server | world <worldname> ] <sequence>
+				//objc del [ server | <worldname> ] <sequence>
 				case "delete":
 				case "del":
-					if ( args.length < 3 ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "You haven't provided enough paramters for this command." );
-						return false;
-					}
-					if ( !args[1].equals( "server" ) && !args[1].equals( "world" ) ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Remove command needs 'server' or 'world'." );
+					if (args.length < 3) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("You haven't provided enough paramters for this command", NamedTextColor.RED)));
 						return false;
 					}
 					type = args[1];
-					seqidx = 2;
-					if ( args[1].equals( "world" ) ) {
-						if ( !checkWorld( args[2] ) ) {
-							sender.sendMessage( chatmsgprefix + ChatColor.RED + "Invalid world provided." );
-							return false;
-						}
-						world = args[2];
-						seqidx = 3;
+					if (!type.equals("server") && !OBJoinCommands.getInstance().isACommandWorld(type)) {
+					    sender.sendMessage(chatMsgPrefix.append(Component.text("World '" + type + "' has no commands or doesn't exist", NamedTextColor.RED)));
+                        return true;
 					}
 					try {
-						seqnum = Integer.parseInt( args[seqidx] );
-					} catch ( NumberFormatException e ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Invalid sequence number provided." );
+						seqnum = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("Invalid sequence number provided", NamedTextColor.RED)));
 						return false;
 					}
-					if ( seqnum < 1 ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Negative or zero sequence numbers aren't allowed." );
+					if (seqnum < 1) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("Negative or zero sequence numbers aren't allowed", NamedTextColor.RED)));
 						return false;						
 					}
 					
 					String cmpstate = null;
 					try {
-						cmpstate = OBJoinCommands.getInstance().getCommand( type, world, seqnum );
-					} catch ( NullPointerException e ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "No command found for that sequence number." );
+						cmpstate = OBJoinCommands.getInstance().getCommand(type, seqnum);
+					} catch (NullPointerException e) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("No command found for that sequence number", NamedTextColor.RED)));
 						break;
 					}
-					String rtnstate = OBJoinCommands.getInstance().deleteCommand( type, world, seqnum );
-					if ( !rtnstate.equals( cmpstate ) ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + rtnstate );
+					String rtnstate = OBJoinCommands.getInstance().deleteCommand(type, seqnum);
+					if (!rtnstate.equals(cmpstate)) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text(rtnstate, NamedTextColor.RED)));
 					} else {
-						sender.sendMessage( chatmsgprefix + ChatColor.GREEN + "Command at sequence number " + seqnum + " removed." );
+						sender.sendMessage(chatMsgPrefix.append(Component.text("Command at sequence number " + seqnum + " removed", NamedTextColor.GREEN)));
 						
 					}
 					break;
 
 				case "set":
-					if ( args.length < 3 ) {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "You haven't provided enough paramters for this command." );
+					if (args.length < 2) {
+						sender.sendMessage(chatMsgPrefix.append(Component.text("You haven't provided enough paramters for this command", NamedTextColor.RED)));
 						return false;
 					}
 					long delay = -1;
-					if ( args[1].equals( "delay") ) {
+					if (args[1].equals("delay")) {
 						try {
-							delay = Long.parseLong( args[2] );
-							if ( delay < 0 ) {
-								sender.sendMessage( chatmsgprefix + ChatColor.RED + "A negative delay isn't allowed." );
+							delay = Long.parseLong(args[2]);
+							if (delay < 0) {
+								sender.sendMessage(chatMsgPrefix.append(Component.text("A negative delay isn't allowed", NamedTextColor.RED)));
 								return false;
 							}
-						} catch ( NumberFormatException e ) {
-							sender.sendMessage( chatmsgprefix + ChatColor.RED + "Invalid delay provided." );
+						} catch (NumberFormatException e) {
+							sender.sendMessage(chatMsgPrefix.append(Component.text("Invalid delay provided", NamedTextColor.RED)));
 							return false;
 						}
 					} else {
-						sender.sendMessage( chatmsgprefix + ChatColor.RED + "Unknown parameter for set command." );
+						sender.sendMessage(chatMsgPrefix.append(Component.text("Unknown parameter for set command", NamedTextColor.RED)));
 						return false;
 					}
-					OBJoinCommands.getInstance().setDelay( delay );
+					OBJoinCommands.getInstance().setDelay(delay);
 					double delayseconds = delay / 20;
-					BigDecimal ds = new BigDecimal( delayseconds ).setScale( 0, RoundingMode.HALF_DOWN );
-					sender.sendMessage( chatmsgprefix + ChatColor.GREEN + "Delay set to " + delay + " ticks (" + ds + " second" + ( ds.intValue() != 1 ? "s" : "" ) + ")");
+					BigDecimal ds = new BigDecimal(delayseconds).setScale(0, RoundingMode.HALF_DOWN);
+					sender.sendMessage(chatMsgPrefix.append(Component.text("Delay set to " + delay + " ticks (" + ds + " second" + (ds.intValue() != 1 ? "s" : "") + ")", NamedTextColor.GREEN)));
 					break;
 
 				default:
-					sender.sendMessage( chatmsgprefix + ChatColor.RED + "Unknown command!");
+					sender.sendMessage(chatMsgPrefix.append(Component.text("Unknown command!", NamedTextColor.RED)));
 					Usage(sender);
 					break;
 			}
@@ -249,25 +243,23 @@ public class CommandListener implements CommandExecutor {
 
 	// show player the command help
     void Usage(CommandSender sender) {
-        sender.sendMessage(chatmsgprefix + "/obs show [server|world <worldname>]" + ChatColor.GOLD + " - Show all or some commands");
-        sender.sendMessage(chatmsgprefix + "/obs add  [server|world <worldname>] <sequence> command" + ChatColor.GOLD + " - Add a new command at sequence number");
-        sender.sendMessage(chatmsgprefix + "/obs del  [server|world <worldname>] <sequence>" + ChatColor.GOLD + " - Remove command at sequence number");
-        sender.sendMessage(chatmsgprefix + "/obs set delay <delayinticks>" + ChatColor.GOLD + " - Set the global command delay");
-    }
-    
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs show [server|<worldname>]", NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(" - Show all or some commands", NamedTextColor.GOLD)));
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs add  [server|<worldname>] <sequence> command", NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(" - Add a new command at sequence number", NamedTextColor.GOLD)));
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs del  [server|<worldname>] <sequence>", NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(" - Remove command at sequence number", NamedTextColor.GOLD)));
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs set delay <delayinticks>", NamedTextColor.LIGHT_PURPLE))
+            .append(Component.text(" - Set the global command delay", NamedTextColor.GOLD)));
+   }
     
     // check a world exists
-    Boolean checkWorld( String checkworld ) {
-    	for ( World world : Bukkit.getWorlds() ) {
-    		if ( world.getName().equals( checkworld ) ) {
-    			return true;
-    		}
-    	}
-    	return false;
-    }
+    boolean checkWorld(String checkworld) {
+        return Bukkit.getWorlds().stream() .anyMatch(world -> world.getName().equals(checkworld));
+   }
     
     // validates a sequence number and adjusts accordingly
-    int validateSeqNum( String type, int seqnum ) {
+    int validateSeqNum(String type, int seqnum) {
     	return seqnum;
-    }
+   }
 }

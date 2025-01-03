@@ -1,7 +1,6 @@
 package net.obmc.OBJoinCommands;
 
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -11,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,10 +28,6 @@ public class EventListener implements Listener
 		doWorldCommands( event.getPlayer() );
 	}
 
-	@EventHandler
-	public void onReSpawn( PlayerRespawnEvent event ) {
-		Player player = event.getPlayer();		
-	}
 	@EventHandler
 	public void onWorldChange( PlayerChangedWorldEvent event ) {
 		Player player = event.getPlayer();
