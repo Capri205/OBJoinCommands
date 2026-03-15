@@ -243,13 +243,13 @@ public class CommandListener implements CommandExecutor {
 
 	// show player the command help
     void Usage(CommandSender sender) {
-        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs show [server|<worldname>]", NamedTextColor.LIGHT_PURPLE))
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/objc show [server|<worldname>]", NamedTextColor.LIGHT_PURPLE))
             .append(Component.text(" - Show all or some commands", NamedTextColor.GOLD)));
-        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs add  [server|<worldname>] <sequence> command", NamedTextColor.LIGHT_PURPLE))
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/objc add  [server|<worldname>] <sequence> command", NamedTextColor.LIGHT_PURPLE))
             .append(Component.text(" - Add a new command at sequence number", NamedTextColor.GOLD)));
-        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs del  [server|<worldname>] <sequence>", NamedTextColor.LIGHT_PURPLE))
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/objc del  [server|<worldname>] <sequence>", NamedTextColor.LIGHT_PURPLE))
             .append(Component.text(" - Remove command at sequence number", NamedTextColor.GOLD)));
-        sender.sendMessage(chatMsgPrefix.append(Component.text("/obs set delay <delayinticks>", NamedTextColor.LIGHT_PURPLE))
+        sender.sendMessage(chatMsgPrefix.append(Component.text("/objc set delay <delayinticks>", NamedTextColor.LIGHT_PURPLE))
             .append(Component.text(" - Set the global command delay", NamedTextColor.GOLD)));
    }
     
